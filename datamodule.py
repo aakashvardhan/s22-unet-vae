@@ -9,6 +9,15 @@ from data.oxford_iiit import OxfordIIITPet
 
 
 class DataModule(LightningDataModule):
+    """
+    DataModule class for handling data loading and processing in the model.
+
+    Args:
+        config (dict): Configuration parameters for the DataModule.
+        sep (str, optional): Separator used in the data file. Defaults to " ".
+        pin_memory (bool, optional): Whether to use pinned memory for data loading. Defaults to True.
+    """
+
     def __init__(self, config, sep: str = " ", pin_memory: bool = True):
         super().__init__()
         self.config = config

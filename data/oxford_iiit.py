@@ -7,6 +7,26 @@ from torch.utils.data import Dataset
 
 
 class OxfordIIITPet(Dataset):
+    """
+    Dataset class for Oxford-IIIT Pet dataset.
+
+    Args:
+        imgs_file (list): List of file paths to the images.
+        masks_file (list): List of file paths to the corresponding masks.
+        height (int): Height of the images and masks (default: 240).
+        width (int): Width of the images and masks (default: 240).
+        transform_img (callable): Optional transform to be applied to the images (default: None).
+        transform_mask (callable): Optional transform to be applied to the masks (default: None).
+
+    Attributes:
+        imgs_file (list): List of file paths to the images.
+        masks_file (list): List of file paths to the corresponding masks.
+        height (int): Height of the images and masks.
+        width (int): Width of the images and masks.
+        transform_img (callable): Transform to be applied to the images.
+        transform_mask (callable): Transform to be applied to the masks.
+    """
+
     def __init__(
         self,
         imgs_file,
@@ -37,6 +57,16 @@ class OxfordIIITPet(Dataset):
         return {"image": transformed_img, "mask": transformed_mask}
 
     def show_img_mask(self, idx):
+        """
+        Display the image and mask corresponding to the given index.
+
+        Parameters:
+        - idx (int): The index of the image and mask to display.
+
+        Returns:
+        None
+        """
+
         img = self._load_image(self.imgs_file[idx])
         mask = self._load_image(self.masks_file[idx])
 
