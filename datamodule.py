@@ -1,70 +1,55 @@
-import os
+from lightning import LightningDataModule
+import torch
+from torch.utils.data import DataLoader, random_split
 from typing import Optional
 
-import pandas as pd
-from lightning import LightningDataModule
-from torch.utils.data import DataLoader
-
-from data.oxford_iiit import OxfordIIITPet
+torch.manual_seed(1)
 
 
 class DataModule(LightningDataModule):
-    """
-    DataModule class for handling data loading and processing in the model.
-
-    Args:
-        config (dict): Configuration parameters for the DataModule.
-        sep (str, optional): Separator used in the data file. Defaults to " ".
-        pin_memory (bool, optional): Whether to use pinned memory for data loading. Defaults to True.
-    """
-
-    def __init__(self, config, sep: str = " ", pin_memory: bool = True):
+    def __init__(self, config, dataset):
         super().__init__()
         self.config = config
-        self.sep = sep
-        self.pin_memory = pin_memory
-        self.train_dataset: Optional[OxfordIIITPet] = None
-        self.val_dataset: Optional[OxfordIIITPet] = None
+        self.dataset = dataset
+        self.save_hyperparameters(self.config)
+        self.train_data: Optional[torch.utils.data.Dataset] = None
+        self.val_data: Optional[torch.utils.data.Dataset] = None
+        self.test_data: Optional[torch.utils.data.Dataset] = None
+        self.train_args = {
+            "batch_size": self.config['batch_size'],
+            "shuffle": True,
+            "num_workers": 4,
+            "pin_memory": True,
+        }
 
-    def prepare_data(self):
-        pass
+        self.val_args = {
+            "batch_size": 10,
+            "shuffle": False,
+            "num_workers": 4,
+            "pin_memory": True,
+        }
 
-    def setup(self, stage: Optional[str] = None):
+    def setup(self, stage=None):
         if stage == "fit" or stage is None:
-            self.train_dataset = self._create_dataset(self.config["train_f"])
-            self.val_dataset = self._create_dataset(self.config["val_f"])
+            train_data = self.dataset(self.config, split="trainval")
 
-            print(f"Number of training samples: {len(self.train_dataset)}")
-            print(f"Number of validation samples: {len(self.val_dataset)}")
+            self.test_data = self.dataset(self.config, split="test")
+
+            total_len = len(train_data)
+            train_len = int(0.8 * total_len)
+            val_len = total_len - train_len
+
+            self.train_data, self.val_data = random_split(
+                train_data,
+                [train_len, val_len],
+                generator=torch.Generator().manual_seed(42),
+            )
 
     def train_dataloader(self):
-        return self._create_dataloader(
-            self.train_dataset, self.config["batch_size"], shuffle=True
-        )
+        return DataLoader(self.train_data, **self.train_args)
 
     def val_dataloader(self):
-        return self._create_dataloader(self.val_dataset, 1, shuffle=False)
+        return DataLoader(self.val_data, **self.val_args)
 
-    def _create_dataset(self, data_file: str) -> OxfordIIITPet:
-        df_list = pd.read_csv(data_file, sep=self.sep, header=None)[0].to_list()
-
-        img_list = [os.path.join(self.config["img_dir"], f"{i}.jpg") for i in df_list]
-        mask_list = [os.path.join(self.config["mask_dir"], f"{i}.png") for i in df_list]
-
-        return OxfordIIITPet(
-            imgs_file=img_list,
-            masks_file=mask_list,
-            transform_img=None,
-            transform_mask=None,
-        )
-
-    def _create_dataloader(
-        self, dataset: OxfordIIITPet, batch_size: int, shuffle: bool
-    ) -> DataLoader:
-        return DataLoader(
-            dataset,
-            batch_size=batch_size,
-            shuffle=shuffle,
-            num_workers=self.config["num_workers"],
-            pin_memory=self.pin_memory,
-        )
+    def test_dataloader(self):
+        return DataLoader(self.test_data, **self.val_args)
