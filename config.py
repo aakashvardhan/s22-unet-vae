@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass,fields
 from typing import Any, Dict
 
 
@@ -25,20 +25,29 @@ class UNetConfig:
     optimizer: str = "adam"
     loss_function: str = "cross_entropy"
 
+    # Encoder and Decoder parameters
+    compression_method: str = "max_pool"
+    expansion_method: str = "upsample"
+
+    softmax_dim: int = 1
+
     # Any other hyperparameters
     dropout_rate: float = 0.5
     augmentation: bool = True
 
-    def load_from_file(self, file_path: str):
-        with open(file_path, "r", encoding="utf-8") as file:
-            config_dict = json.load(file)
-            self.update_from_dict(config_dict)
+def load_config(config_path: str) -> Dict[str, Any]:
+    with open(config_path, "r") as file:
+        config = json.load(file)
+    return config
 
-    def save_to_file(self, file_path: str):
-        with open(file_path, "w", encoding="utf-8") as file:
-            json.dump(self.__dict__, file, indent=4)
+def update_config(config: UNetConfig, json_data: dict):
+    for field in fields(config):
+        if field.name in json_data:
+            setattr(config, field.name, json_data[field.name])
+    return config
 
-    def update_from_dict(self, config_dict: Dict[str, Any]):
-        for key, value in config_dict.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
+# if __name__ == "__main__":
+#     config = UNetConfig()
+#     json_data = load_config("training_1.json")
+#     config = update_config(config, json_data)
+#     print(config)

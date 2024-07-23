@@ -3,6 +3,7 @@ import pytest
 import torch
 from data.oxford_iiit import OxfordIIITPet
 from datamodule import DataModule
+from models.unet import UNet
 
 @pytest.fixture
 def config():
@@ -10,7 +11,9 @@ def config():
         "root_dir": "./data",
         "height": 224,
         "width": 224,
-        "batch_size": 32
+        "batch_size": 32,
+        "compression_method": "max_pool",
+        "expansion_method": "upsample"
     }
 
 def test_oxford_iiit_pet_dataset(config):
@@ -32,6 +35,7 @@ def test_datamodule(config):
     assert "image" in batch and "mask" in batch
     assert batch["image"].shape == (config["batch_size"], 3, 224, 224)
     assert batch["mask"].shape == (config["batch_size"], 1, 224, 224)
+    
 
 if __name__ == "__main__":
     pytest.main([__file__])

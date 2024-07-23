@@ -1,0 +1,5 @@
+{
+    "compression_method": "strided_convolution",
+    "expansion_method": "upsample",
+    "loss_function": "dice"
+}

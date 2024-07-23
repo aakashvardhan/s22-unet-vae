@@ -1,0 +1,5 @@
+{
+    "compression_method": "strided_convolution",
+    "expansion_method": "transposed_conv",
+    "loss_function": "cross_entropy"
+}
