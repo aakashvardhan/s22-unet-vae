@@ -7,6 +7,22 @@ from torchvision.datasets import OxfordIIITPet as Dataset
 
 
 class OxfordIIITPet(Dataset):
+    """
+    Dataset class for the Oxford-IIIT Pet dataset.
+
+    Args:
+    - config (dict): Configuration dictionary containing the dataset parameters.
+    - split (str): Split of the dataset to use (default: "trainval").
+    - transform_img (callable): Optional image transformation function (default: None).
+    - transform_mask (callable): Optional mask transformation function (default: None).
+
+    Attributes:
+    - config (dict): Configuration dictionary containing the dataset parameters.
+    - height (int): Height of the images and masks.
+    - width (int): Width of the images and masks.
+    - transform_img (callable): Image transformation function.
+    - transform_mask (callable): Mask transformation function.
+    """
 
     def __init__(
         self,

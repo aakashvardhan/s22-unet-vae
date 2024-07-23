@@ -1,12 +1,30 @@
-from lightning import LightningDataModule
-import torch
-from torch.utils.data import DataLoader, random_split
 from typing import Optional
+
+import torch
+from lightning import LightningDataModule
+from torch.utils.data import DataLoader, random_split
 
 torch.manual_seed(1)
 
 
 class DataModule(LightningDataModule):
+    """
+    LightningDataModule subclass for handling data loading and processing.
+
+    Args:
+        config (dict): Configuration parameters for the data module.
+        dataset: The dataset class to be used for loading the data.
+
+    Attributes:
+        config (dict): Configuration parameters for the data module.
+        dataset: The dataset class to be used for loading the data.
+        train_data (Optional[torch.utils.data.Dataset]): Training dataset.
+        val_data (Optional[torch.utils.data.Dataset]): Validation dataset.
+        test_data (Optional[torch.utils.data.Dataset]): Test dataset.
+        train_args (dict): Arguments for training data loader.
+        val_args (dict): Arguments for validation data loader.
+    """
+
     def __init__(self, config, dataset):
         super().__init__()
         self.config = config
@@ -30,6 +48,12 @@ class DataModule(LightningDataModule):
         }
 
     def setup(self, stage=None):
+        """
+        Setup method to prepare the data.
+
+        Args:
+            stage (str, optional): Stage of the training process. Defaults to None.
+        """
         if stage == "fit" or stage is None:
             train_data = self.dataset(self.config, split="trainval")
 
@@ -46,10 +70,28 @@ class DataModule(LightningDataModule):
             )
 
     def train_dataloader(self):
+        """
+        Returns the training data loader.
+
+        Returns:
+            torch.utils.data.DataLoader: Training data loader.
+        """
         return DataLoader(self.train_data, **self.train_args)
 
     def val_dataloader(self):
+        """
+        Returns the validation data loader.
+
+        Returns:
+            torch.utils.data.DataLoader: Validation data loader.
+        """
         return DataLoader(self.val_data, **self.val_args)
 
     def test_dataloader(self):
+        """
+        Returns the test data loader.
+
+        Returns:
+            torch.utils.data.DataLoader: Test data loader.
+        """
         return DataLoader(self.test_data, **self.val_args)
