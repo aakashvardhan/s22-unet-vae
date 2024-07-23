@@ -1,0 +1,8 @@
+lightning
+torchvision
+torchmetrics
+pathlib
+matplotlib
+albumentations
+PIL
+tqdm
