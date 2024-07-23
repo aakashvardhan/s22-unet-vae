@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class DiceLoss(nn.Module):
     # Multi class Dice Loss for Image Segmentation using softmax
     def __init__(self, config):
@@ -19,11 +20,12 @@ class DiceLoss(nn.Module):
 
         # Apply softmax to y_pred if required
         prob = y_pred
-        if self.config['softmax_dim'] is not None:
-            prob = nn.Softmax(dim=self.config['softmax_dim'])(y_pred)
+        if self.config["softmax_dim"] is not None:
+            prob = nn.Softmax(dim=self.config["softmax_dim"])(y_pred)
 
         # Convert y_true to one-hot encoding and rearrange dimensions
-        y_true = F.one_hot(y_true, num_classes=self.config['num_classes']).permute(0, 3, 1, 2).float()
+        y_true = F.one_hot(y_true, num_classes=3)
+        y_true = y_true.permute(0, 3, 1, 2).float()
 
         # Calculate dice loss
         numerator = 2 * torch.sum(prob * y_true, dim=(2, 3))
