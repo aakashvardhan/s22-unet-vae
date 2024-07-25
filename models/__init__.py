@@ -1,2 +1,3 @@
-from .double_conv2D import DoubleConv2D
-from .encoder_mini_block import EncoderMiniBlock
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

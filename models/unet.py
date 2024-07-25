@@ -1,5 +1,10 @@
 import torch.nn as nn
 from lightning import LightningModule
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from models.encoder_mini_block import EncoderMiniBlock
 from models.decoder_mini_block import DecoderMiniBlock
 
@@ -88,3 +93,17 @@ class UNet(LightningModule):
         x = self.final_layer(x)
 
         return x
+
+
+# if __name__ == "__main__":
+#     from config import UNetConfig, load_config, update_config
+#     from torchsummary import summary
+
+#     config = UNetConfig()
+
+#     json_data = load_config("training_1.json")
+#     config = update_config(config, json_data)
+
+#     net = UNet(config)
+
+#     summary(net, (3, 240, 240))

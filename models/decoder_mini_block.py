@@ -20,23 +20,19 @@ class DecoderMiniBlock(LightningModule):
             )
         elif channel_expansion == "transposed_conv":
             self.ce = nn.ConvTranspose2d(
-                in_channels, out_channels // 2, kernel_size=2, stride=2
+                in_channels, in_channels // 2, kernel_size=2, stride=2
             )
         else:
             raise Exception("Invalid Channel Expansion Method!")
 
     def forward(self, x, skip):
         # Dynamically adjust the size of x to match that of skip
-        if hasattr(self, "ce") and isinstance(self.ce, nn.Upsample):
-            self.ce.size = (skip.size(2), skip.size(3))
-            x = self.ce(x)
-        else:
-            x = self.ce(x)
+        x = self.ce(x)
 
-        # print(f"x shape: {x.shape}, skip shape: {skip.shape}")
+        print(f"x shape: {x.shape}, skip shape: {skip.shape}")
 
         # Concatenate along the channel dimension
-        x = torch.cat([x, skip], dim=1)
+        x = torch.cat([skip, x], dim=1)
         x = self.double_conv2d(x)
         x = self.dropout(x)
         return x
