@@ -20,8 +20,8 @@ class DiceLoss(nn.Module):
 
         # Apply softmax to y_pred if required
         prob = y_pred
-        if self.config["softmax_dim"] is not None:
-            prob = nn.Softmax(dim=self.config["softmax_dim"])(y_pred)
+        if self.config.softmax_dim is not None:
+            prob = nn.Softmax(dim=self.config.softmax_dim)(y_pred)
 
         # Convert y_true to one-hot encoding and rearrange dimensions
         y_true = F.one_hot(y_true, num_classes=3)

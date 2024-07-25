@@ -4,5 +4,5 @@ torchmetrics
 pathlib
 matplotlib
 albumentations
-PIL
 tqdm
+wandb

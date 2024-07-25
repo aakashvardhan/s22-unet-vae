@@ -7,14 +7,14 @@ from typing import Any, Dict
 class UNetConfig:
     # Model parameters
     in_channels: int = 3
-    out_channels: int = 1
+    out_channels: int = 3
     num_filters: int = 64
     num_layers: int = 4
 
     # Training parameters
     batch_size: int = 16
     learning_rate: float = 0.001
-    epochs: int = 50
+    epochs: int = 25
 
     # Data parameters
     root_dir: str = "./data"

@@ -16,7 +16,7 @@ class DecoderMiniBlock(LightningModule):
         # Set up the upsampling method
         if channel_expansion == "upsample":
             self.ce = nn.Upsample(
-                scale_factor=None, mode="bilinear", align_corners=True
+                scale_factor=2, mode="bilinear", align_corners=True
             )
         elif channel_expansion == "transposed_conv":
             self.ce = nn.ConvTranspose2d(

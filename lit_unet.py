@@ -24,22 +24,22 @@ class LitUNet(LightningModule):
             task="multiclass", num_classes=3
         )
 
-        if self.config["loss_function"] == "cross_entropy":
+        if self.config.loss_function == "cross_entropy":
             self.loss_function = nn.CrossEntropyLoss()
-        elif self.config["loss_function"] == "dice":
+        elif self.config.loss_function == "dice":
             self.loss_function = DiceLoss(self.config)
 
     def forward(self, x):
         return self.model(x)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         scheduler = {
             "scheduler": torch.optim.lr_scheduler.OneCycleLR(
                 optimizer,
-                max_lr=self.max_lr,
+                max_lr=self.best_lr,
                 steps_per_epoch=int(len(self.trainer.datamodule.train_dataloader())),
-                epochs=self.config["epochs"],
+                epochs=self.config.epochs,
             ),
             "interval": "step",
             "frequency": 1,

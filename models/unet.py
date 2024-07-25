@@ -10,11 +10,11 @@ class UNet(LightningModule):
         super().__init__()
 
         # Contraction / Encoding Block
-        channel_reduction = config["compression_method"]
-        in_channels = config["in_channels"]
-        n_filters = config["num_filters"]
-        dropout = config["dropout_rate"]
-        out_channels = config["out_channels"]
+        channel_reduction = config.compression_method
+        in_channels = config.in_channels
+        n_filters = config.num_filters
+        dropout = config.dropout_rate
+        out_channels = config.out_channels
 
         self.enc1 = EncoderMiniBlock(
             in_channels,
@@ -45,7 +45,7 @@ class UNet(LightningModule):
         )
 
         # Expansion / Decoding Block
-        channel_expansion = config["expansion_method"]
+        channel_expansion = config.expansion_method
         self.dec1 = DecoderMiniBlock(
             n_filters,
             n_filters // 2,

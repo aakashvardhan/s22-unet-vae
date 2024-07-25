@@ -32,14 +32,14 @@ class OxfordIIITPet(Dataset):
         transform_mask=None,
     ):
         super().__init__(
-            root=config["root_dir"],
+            root=config.root_dir,
             split=split,
             target_types="segmentation",
             download=True,
         )
         self.config = config
-        self.height = self.config["height"]
-        self.width = self.config["width"]
+        self.height = self.config.height
+        self.width = self.config.width
         self.transform_img = transform_img or self._default_img_transform()
         self.transform_mask = transform_mask or self._default_mask_transform()
 

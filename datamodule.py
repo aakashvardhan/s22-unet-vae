@@ -3,7 +3,7 @@ from typing import Optional
 import torch
 from lightning import LightningDataModule
 from torch.utils.data import DataLoader, random_split
-
+from data.oxford_iiit import OxfordIIITPet
 torch.manual_seed(1)
 
 
@@ -25,16 +25,16 @@ class DataModule(LightningDataModule):
         val_args (dict): Arguments for validation data loader.
     """
 
-    def __init__(self, config, dataset):
+    def __init__(self, config, dataset=OxfordIIITPet):
         super().__init__()
         self.config = config
         self.dataset = dataset
-        self.save_hyperparameters(self.config)
+        self.save_hyperparameters()
         self.train_data: Optional[torch.utils.data.Dataset] = None
         self.val_data: Optional[torch.utils.data.Dataset] = None
         self.test_data: Optional[torch.utils.data.Dataset] = None
         self.train_args = {
-            "batch_size": self.config['batch_size'],
+            "batch_size": self.config.batch_size,
             "shuffle": True,
             "num_workers": 4,
             "pin_memory": True,

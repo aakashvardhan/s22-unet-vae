@@ -1,4 +1,6 @@
 __pycache__/
 *.pyc
-
+data/oxford-iiit-pet
 test_model.py
+wandb
+*.ckpt

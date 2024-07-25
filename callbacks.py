@@ -5,9 +5,8 @@ from utils.plot_example import plot_test_example
 
 
 class ClassAccuracyLoss(pl.Callback):
-    def __init__(self, config):
+    def __init__(self):
         super().__init__()
-        self.config = config
 
     def on_train_epoch_end(self, trainer, *args, **kwargs):
         print(
@@ -21,9 +20,8 @@ class ClassAccuracyLoss(pl.Callback):
 
 
 class PlotExampleCallback(pl.Callback):
-    def __init__(self, config, interval=5):
+    def __init__(self,interval=5):
         super().__init__()
-        self.config = config
         self.interval = interval
 
     def on_validation_epoch_end(self, trainer, *args, **kwargs):
