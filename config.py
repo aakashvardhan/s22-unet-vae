@@ -26,8 +26,8 @@ class UNetConfig:
     loss_function: str = "cross_entropy"
 
     # Encoder and Decoder parameters
-    compression_method: str = "max_pool"
-    expansion_method: str = "upsample"
+    channel_reduction_method: str = "max_pool"
+    channel_expansion_method: str = "upsample"
 
     softmax_dim: int = 1
 

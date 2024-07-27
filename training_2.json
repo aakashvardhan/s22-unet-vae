@@ -1,5 +1,5 @@
 {
-    "compression_method": "max_pool",
-    "expansion_method": "transposed_conv",
+    "channel_reduction_method": "max_pool",
+    "channel_expansion_method": "conv_transpose",
     "loss_function": "dice"
 }

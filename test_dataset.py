@@ -12,8 +12,8 @@ def config():
         "height": 224,
         "width": 224,
         "batch_size": 32,
-        "compression_method": "max_pool",
-        "expansion_method": "upsample"
+        "channel_reduction_method": "max_pool",
+        "channel_expansion_method": "upsample"
     }
 
 def test_oxford_iiit_pet_dataset(config):
