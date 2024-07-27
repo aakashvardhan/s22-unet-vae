@@ -50,7 +50,7 @@ class LitUNet(LightningModule):
         x = batch["image"]
         y = batch["mask"]
         y = y.squeeze(1).to(dtype=torch.long)
-        y_hat, _ = self(x)
+        y_hat = self(x)
         loss = self.loss_function(y_hat, y)
 
         # Log training metrics
@@ -64,7 +64,7 @@ class LitUNet(LightningModule):
         x = batch["image"]
         y = batch["mask"]
         y = y.squeeze(1).to(dtype=torch.long)
-        y_hat, _ = self(x)
+        y_hat = self(x)
         loss = self.loss_function(y_hat, y)
 
         # Log validation metrics
