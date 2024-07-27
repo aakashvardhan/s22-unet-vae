@@ -50,11 +50,11 @@ class OxfordIIITPet(Dataset):
         img = self._load_image(self._images[idx])
         mask = self._load_image(self._segs[idx], mode="L")
 
-        transformed_img = self.transform_img(image=np.array(img))
-        transformed_img = transformed_img["image"]
+        transformed_img = self.transform_img(image=np.array(img))["image"]
+        # transformed_img = transformed_img["image"]
 
-        transformed_mask = self.transform_mask(image=np.array(mask))
-        transformed_mask = transformed_mask["mask"]
+        transformed_mask = self.transform_mask(image=np.array(mask))["image"]
+        # transformed_mask = transformed_mask["mask"]
         transformed_mask = transformed_mask * 255.0 - 1.0
 
         return {"image": transformed_img, "mask": transformed_mask}
