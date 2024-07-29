@@ -72,10 +72,10 @@ class LitUNet(LightningModule):
 
         # Log validation metrics
         self.valid_acc(y_hat, y)
-        self.log("valid_acc", self.valid_acc, on_step=True, on_epoch=True)
+        self.log("val_acc", self.valid_acc, on_step=True, on_epoch=True)
 
         # Log validation loss
-        self.log("valid_loss", loss, on_step=True, on_epoch=True)
+        self.log("val_loss", loss, on_step=True, on_epoch=True)
 
 
 
