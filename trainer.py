@@ -16,7 +16,7 @@ from lightning.pytorch.callbacks import (
 from lightning.pytorch.loggers import WandbLogger
 from lightning.pytorch.tuner import Tuner
 
-from callbacks import ClassAccuracyLoss, PlotExampleCallback
+from callbacks import ClassAccuracyLoss
 from config import UNetConfig, update_config
 from datamodule import DataModule
 from lit_unet import LitUNet
@@ -63,7 +63,6 @@ def setup_callbacks(config: UNetConfig) -> list:
             verbose=True,
         ),
         ClassAccuracyLoss(),
-        PlotExampleCallback(),
         LearningRateMonitor(logging_interval="step", log_momentum=True),
         EarlyStopping(monitor="val_loss", patience=10, mode="min"),
         RichModelSummary(max_depth=2),

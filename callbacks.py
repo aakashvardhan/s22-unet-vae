@@ -18,14 +18,3 @@ class ClassAccuracyLoss(pl.Callback):
             f"\n Epoch: {trainer.current_epoch} | Val Loss: {trainer.callback_metrics['val_loss']:.5f} | Val Acc: {trainer.callback_metrics['val_acc']:.5f}"
         )
 
-
-class PlotExampleCallback(pl.Callback):
-    def __init__(self,interval=5):
-        super().__init__()
-        self.interval = interval
-
-    def on_validation_epoch_end(self, trainer, *args, **kwargs):
-        epoch = trainer.current_epoch
-        if epoch % self.interval == 0:
-            print(f"\n Plotting example image from validation set at epoch {epoch}")
-            plot_test_example(trainer.datamodule.val_dataloader())
