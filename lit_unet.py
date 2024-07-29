@@ -79,31 +79,31 @@ class LitUNet(LightningModule):
 
 
 
-# Test the implementation
+#Test the implementation
 
-# if __name__ == "__main__":
-#     from lightning.pytorch import Trainer, seed_everything
-#     from config import UNetConfig, load_config, update_config
-#     import torch
-#     import os
-#     from lit_unet import LitUNet
-#     from datamodule import DataModule
-#     import lightning as pl
+if __name__ == "__main__":
+    from lightning.pytorch import Trainer, seed_everything
+    from config import UNetConfig, load_config, update_config
+    import torch
+    import os
+    from lit_unet import LitUNet
+    from datamodule import DataModule
+    import lightning as pl
     
-#     config = UNetConfig()
-#     json_data = load_config("training_1.json")
-#     config = update_config(config, json_data)
-#     print(config)
+    config = UNetConfig()
+    json_data = load_config("training_1.json")
+    config = update_config(config, json_data)
+    print(config)
     
-#     config.batch_size = 32
-#     print(config)
+    config.batch_size = 32
+    print(config)
     
-#     data_module = DataModule(config)
-#     data_module.setup()
+    data_module = DataModule(config)
+    data_module.setup()
     
-#     model = LitUNet(config)
+    model = LitUNet(config)
     
-#     trainer = pl.Trainer(fast_dev_run=True, accelerator="cpu")
+    trainer = pl.Trainer(fast_dev_run=True, accelerator="cpu")
     
-#     trainer.fit(model=model, datamodule=data_module)
+    trainer.fit(model=model, datamodule=data_module)
     

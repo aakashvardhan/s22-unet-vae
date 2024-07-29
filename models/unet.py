@@ -68,7 +68,7 @@ class DecoderMiniBlock(nn.Module):
             self.up_conv = nn.Conv2d(in_channels, in_channels // 2, kernel_size=1)
         elif channel_expansion == "conv_transpose":
             self.up = nn.ConvTranspose2d(
-                in_channels, in_channels // 2, kernel_size=2, stride=2
+                in_channels, in_channels // 2, kernel_size=3, stride=2, padding=1, output_padding=1
             )
         else:
             self.up = None
@@ -105,56 +105,56 @@ class UNet(nn.Module):
 
         self.enc1 = EncoderMiniBlock(
             in_channels,
-            n_filters // 8,
+            n_filters,
             dropout=dropout,
             channel_reduction=channel_reduction,
         )
 
         self.enc2 = EncoderMiniBlock(
-            n_filters // 8,
-            n_filters // 4,
+            n_filters,
+            n_filters * 2,
             dropout=dropout,
             channel_reduction=channel_reduction,
         )
 
         self.enc3 = EncoderMiniBlock(
-            n_filters // 4,
-            n_filters // 2,
-            dropout=dropout,
+            n_filters * 2,
+            n_filters * 4,
+            dropout=0.1,
             channel_reduction=channel_reduction,
         )
 
         self.enc4 = EncoderMiniBlock(
-            n_filters // 2,
-            n_filters,
-            dropout=dropout,
+            n_filters * 4,
+            n_filters * 8,
+            dropout=0.1,
             channel_reduction=None,
         )
 
         # Expansion / Decoding Block
         self.dec1 = DecoderMiniBlock(
-            n_filters,
-            n_filters // 2,
+            n_filters * 8,
+            n_filters * 4,
             dropout=dropout,
             channel_expansion=channel_expansion,
         )
 
         self.dec2 = DecoderMiniBlock(
-            n_filters // 2,
-            n_filters // 4,
+            n_filters * 4,
+            n_filters * 2,
             dropout=dropout,
             channel_expansion=channel_expansion,
         )
 
         self.dec3 = DecoderMiniBlock(
-            n_filters // 4,
-            n_filters // 8,
+            n_filters * 2,
+            n_filters,
             dropout=dropout,
             channel_expansion=channel_expansion,
         )
 
         # Final Layer
-        self.final_layer = nn.Conv2d(n_filters // 8, out_channels, kernel_size=1)
+        self.final_layer = nn.Conv2d(n_filters, out_channels, kernel_size=1)
 
         # Assert in_channels is 3 and in_channels == out_channels
         assert in_channels == 3, "in_channels must be 3"
@@ -197,16 +197,16 @@ class UNet(nn.Module):
         return x
 
 
-# if __name__ == "__main__":
-#     from config import UNetConfig, load_config, update_config
-#     from torchsummary import summary
+if __name__ == "__main__":
+    from config import UNetConfig, load_config, update_config
+    from torchsummary import summary
 
-#     config = UNetConfig()
+    config = UNetConfig()
 
-#     json_data = load_config("training_4.json")
-#     config = update_config(config, json_data)
-#     print(config)
+    json_data = load_config("training_4.json")
+    config = update_config(config, json_data)
+    print(config)
 
-#     net = UNet(config, debug=False)
-#     # print(net)
-#     summary(net, (3, 240, 240))
+    net = UNet(config, debug=True)
+    # print(net)
+    summary(net, (3, 240, 240))
