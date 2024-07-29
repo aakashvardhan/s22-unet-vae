@@ -12,4 +12,4 @@ The U-Net model is trained using the following strategies:
 
 ## Metrics & Visualizations
 
-<iframe src="https://wandb.ai/akv1000/s22-unet-vae/reports/U-Net-from-Scratch---Vmlldzo4ODUyMjI0" style="border:none;height:1024px;width:100%">
+[View my W&B Report](https://wandb.ai/akv1000/s22-unet-vae/reports/U-Net-from-Scratch---Vmlldzo4ODUyMjI0" style="border:none;height:1024px;width:100%)
