@@ -28,8 +28,7 @@ class OxfordIIITPet(Dataset):
         self,
         config,
         split="trainval",
-        transform_img=None,
-        transform_mask=None,
+        transform=None,
     ):
         super().__init__(
             root=config.root_dir,
@@ -40,8 +39,7 @@ class OxfordIIITPet(Dataset):
         self.config = config
         self.height = self.config.height
         self.width = self.config.width
-        self.transform_img = transform_img or self._default_img_transform()
-        self.transform_mask = transform_mask or self._default_mask_transform()
+        self.transform = transform or self._default_transform()
 
     def __len__(self):
         return len(self._images)
@@ -50,11 +48,12 @@ class OxfordIIITPet(Dataset):
         img = self._load_image(self._images[idx])
         mask = self._load_image(self._segs[idx], mode="L")
 
-        transformed_img = self.transform_img(image=np.array(img))["image"]
-        # transformed_img = transformed_img["image"]
-
-        transformed_mask = self.transform_mask(image=np.array(mask))["image"]
+        aug = self.transform(image=np.array(img), mask=np.array(mask))
         # transformed_mask = transformed_mask["mask"]
+
+        transformed_img = aug["image"]
+        transformed_mask = aug["mask"]
+
         transformed_mask = transformed_mask * 255.0 - 1.0
 
         return {"image": transformed_img, "mask": transformed_mask}
@@ -82,14 +81,11 @@ class OxfordIIITPet(Dataset):
     def _load_image(path, mode="RGB"):
         return Image.open(path).convert(mode)
 
-    def _default_img_transform(self):
+    def _default_transform(self):
         return A.Compose(
             [
                 A.Resize(height=self.height, width=self.width, always_apply=True),
                 A.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),
-                ToTensorV2()
+                ToTensorV2(),
             ]
         )
-
-    def _default_mask_transform(self):
-        return A.Compose([A.Resize(height=self.height, width=self.width), ToTensorV2()])

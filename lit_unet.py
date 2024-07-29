@@ -51,6 +51,13 @@ class LitUNet(LightningModule):
         y = batch["mask"]
         y = y.squeeze(1).to(dtype=torch.long)
         y_hat = self(x)
+        
+        # Debugging
+        print("y shape:", y.shape)
+        print("y_hat shape:", y_hat.shape)
+        print("y unique values:", torch.unique(y))
+        print("y_hat size:", y_hat.size())
+        
         loss = self.loss_function(y_hat, y)
 
         # Log training metrics
