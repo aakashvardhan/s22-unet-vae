@@ -36,15 +36,13 @@ class DataModule(LightningDataModule):
         self.train_args = {
             "batch_size": self.config.batch_size,
             "shuffle": True,
-            "num_workers": 4,
-            "pin_memory": True,
+            "num_workers": 4
         }
 
         self.val_args = {
-            "batch_size": 10,
+            "batch_size": self.config.batch_size,
             "shuffle": False,
-            "num_workers": 4,
-            "pin_memory": True,
+            "num_workers": 4
         }
 
     def setup(self, stage=None):

@@ -142,14 +142,14 @@ class UNet(nn.Module):
         self.dec2 = DecoderMiniBlock(
             n_filters * 4,
             n_filters * 2,
-            dropout=dropout,
+            dropout=0.1,
             channel_expansion=channel_expansion,
         )
 
         self.dec3 = DecoderMiniBlock(
             n_filters * 2,
             n_filters,
-            dropout=dropout,
+            dropout=0.1,
             channel_expansion=channel_expansion,
         )
 

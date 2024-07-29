@@ -56,7 +56,7 @@ class LitUNet(LightningModule):
 
         # Log training metrics
         self.train_acc(y_hat, y)
-        self.log("train_acc", self.train_acc, on_step=True, on_epoch=True)
+        self.log("train_acc", self.train_acc, on_step=False, on_epoch=True)
 
         # Log training loss
         self.log("train_loss", loss, on_step=True, on_epoch=True)
@@ -72,7 +72,7 @@ class LitUNet(LightningModule):
 
         # Log validation metrics
         self.valid_acc(y_hat, y)
-        self.log("val_acc", self.valid_acc, on_step=True, on_epoch=True)
+        self.log("val_acc", self.valid_acc, on_step=False, on_epoch=True)
 
         # Log validation loss
         self.log("val_loss", loss, on_step=True, on_epoch=True)
