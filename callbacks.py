@@ -1,7 +1,6 @@
 import torch
 import lightning as pl
 from tqdm.notebook import tqdm
-from utils.plot_example import plot_test_example
 
 
 class ClassAccuracyLoss(pl.Callback):
