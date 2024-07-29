@@ -1,10 +1,9 @@
-import albumentations as A
+
 import matplotlib.pyplot as plt
 import numpy as np
-from albumentations.pytorch import ToTensorV2
 from PIL import Image
 from torchvision.datasets import OxfordIIITPet as Dataset
-
+from torchvision import transforms
 
 class OxfordIIITPet(Dataset):
     """
@@ -28,7 +27,8 @@ class OxfordIIITPet(Dataset):
         self,
         config,
         split="trainval",
-        transform=None,
+        transform_img=None,
+        transform_mask=None,
     ):
         super().__init__(
             root=config.root_dir,
@@ -39,7 +39,8 @@ class OxfordIIITPet(Dataset):
         self.config = config
         self.height = self.config.height
         self.width = self.config.width
-        self.transform = transform or self._default_transform()
+        self.transform_img = transform_img or self._default_transform_img()
+        self.transform_mask = transform_mask or self._default_transform_mask()
 
     def __len__(self):
         return len(self._images)
@@ -48,11 +49,8 @@ class OxfordIIITPet(Dataset):
         img = self._load_image(self._images[idx])
         mask = self._load_image(self._segs[idx], mode="L")
 
-        aug = self.transform(image=np.array(img), mask=np.array(mask))
-        # transformed_mask = transformed_mask["mask"]
-
-        transformed_img = aug["image"]
-        transformed_mask = aug["mask"]
+        transformed_img = self.transform_img(img)
+        transformed_mask = self.transform_mask(mask)
 
         transformed_mask = transformed_mask * 255.0 - 1.0
 
@@ -81,11 +79,19 @@ class OxfordIIITPet(Dataset):
     def _load_image(path, mode="RGB"):
         return Image.open(path).convert(mode)
 
-    def _default_transform(self):
-        return A.Compose(
+    def _default_transform_img(self):
+        return transforms.Compose(
             [
-                A.Resize(height=self.height, width=self.width, always_apply=True),
-                A.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),
-                ToTensorV2(),
+                transforms.Resize((self.height, self.width)),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),
+            ]
+        )
+        
+    def _default_transform_mask(self):
+        return transforms.Compose(
+            [
+                transforms.Resize((self.height, self.width)),
+                transforms.ToTensor(),
             ]
         )

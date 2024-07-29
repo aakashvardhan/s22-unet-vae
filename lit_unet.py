@@ -107,7 +107,7 @@ if __name__ == "__main__":
     
     model = LitUNet(config)
     
-    trainer = pl.Trainer(fast_dev_run=True)
+    trainer = pl.Trainer(fast_dev_run=True, accelerator="cpu")
     
     trainer.fit(model=model, datamodule=data_module)
     
