@@ -43,6 +43,7 @@ class LitUNet(LightningModule):
             ),
             "interval": "step",
             "frequency": 1,
+            "monitor": "val_loss",
         }
         return [optimizer], [scheduler]
 
@@ -59,6 +60,8 @@ class LitUNet(LightningModule):
 
         # Log training loss
         self.log("train_loss", loss, on_step=True, on_epoch=True)
+        
+        return loss
         
     def validation_step(self, batch, batch_idx):
         x = batch["image"]
