@@ -23,4 +23,5 @@ The model is trained using the following configurations:
 
 ## Metrics & Visualizations
 
-[View my W&B Report](https://wandb.ai/akv1000/s22-unet-vae/reports/U-Net-from-Scratch---Vmlldzo4ODUyMjI0)
+[View my W&B Report](https://api.wandb.ai/links/akv1000/53nprd7u)
+
