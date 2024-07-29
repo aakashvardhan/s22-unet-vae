@@ -7,8 +7,19 @@ U-Net is a convolutional neural network architecture that is used for image segm
 
 The U-Net model is trained using the following strategies:
 
+- `Max Pooling(MP)`: The model uses max pooling layers to downsample the input image.
+- `Transpose Convolution(Tr)`: The model uses transpose convolution layers to upsample the input image.
+- `Binary Cross Entropy(BCE)`: The model uses binary cross entropy loss function to calculate the loss for binary segmentation.
+- `Dice Loss`: The model uses a custom multiclass dice loss function.
+- `Strided Convolution(StrConv)`: The model uses strided convolution layers to downsample the input image by a factor of 2.
+- `Upsampling(Ups)`: The model uses upsampling layers to upsample the input image by a factor of 2.
 
+The model is trained using the following configurations:
 
+- MP+Tr+BCE
+- MP+Tr+Dice Loss
+- StrConv+Tr+BCE
+- StrConv+Ups+Dice Loss
 
 ## Metrics & Visualizations
 
