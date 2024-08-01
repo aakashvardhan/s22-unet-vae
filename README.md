@@ -25,3 +25,15 @@ The model is trained using the following configurations:
 
 [View my W&B Report](https://api.wandb.ai/links/akv1000/53nprd7u)
 
+## Usage
+
+To train the U-Net model, run the following command:
+
+```bash
+python trainer.py --config "training_1.json" --batch_size 64 --epochs 25
+```
+
+Note: You can change the configuration file to train the model with different strategies. For example, to train the model with MP+Tr+Dice Loss, change the configuration file to `training_2.json`.
+
+
+
